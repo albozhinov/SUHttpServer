@@ -15,17 +15,6 @@ namespace SUHttpServer.Startup.Controllers
 
         private const string FileName = "content.txt";
 
-        private const string HtmlForm = @"<form action='/HTML' method='POST'>
-Name: <input type='text' name='Name' />
-Age: <input type='number' name='Age' />
-<input type='submit' value='Save' />
-</form>";
-
-        private const string DownloadForm = @"<form action='/Content' method='POST'>
-<input type='submit' value='Download Sites Content' />
-</form>";
-
-
         public HomeController(Request request)
             : base(request)
         {
@@ -36,7 +25,7 @@ Age: <input type='number' name='Age' />
 
         public Response Redirect() => Redirect("https://softuni.org/");
 
-        public Response Html() => Html(HtmlForm);
+        public Response Html() => View();
 
         public Response HtmlFormPost()
         {
@@ -51,7 +40,7 @@ Age: <input type='number' name='Age' />
             return Text(formData);
         }       
 
-        public Response Content() => Html(DownloadForm);
+        public Response Content() => View();
 
         public Response DownloadContent()
         {
