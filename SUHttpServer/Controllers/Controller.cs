@@ -13,6 +13,9 @@ namespace SUHttpServer.Controllers
         }
 
         protected Response Text(string text) => new TextResponse(text);
+
+        protected Response Html(string text) => new HtmlResponse(text);
+
         protected Response Html(string text, CookieCollection cookies)
         {
             var response = new HtmlResponse(text);
