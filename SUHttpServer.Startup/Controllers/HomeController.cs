@@ -1,5 +1,6 @@
 ﻿using SUHttpServer.Controllers;
 using SUHttpServer.HTTP;
+using SUHttpServer.Startup.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +30,16 @@ namespace SUHttpServer.Startup.Controllers
 
         public Response HtmlFormPost()
         {
-            string formData = string.Empty;
+            var name = Request.Form["Name"];
+            var age = int.Parse(Request.Form["Age"]);
 
-            foreach (var (key, value) in Request.Form)
+            var model = new FromViewModel()
             {
-                formData += $"{key} - {value}";
-                formData += Environment.NewLine;
-            }
+                Name = name,
+                Age = age
+            };
 
-            return Text(formData);
+            return View(model);
         }       
 
         public Response Content() => View();
