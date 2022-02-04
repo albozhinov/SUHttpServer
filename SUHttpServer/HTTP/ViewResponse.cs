@@ -21,7 +21,7 @@ namespace SUHttpServer.HTTP
 
             var viewContent = File.ReadAllText(viewPath);
 
-            this.Body = viewContent;
+            Body = viewContent;
         }
     }
 }
