@@ -40,6 +40,7 @@ namespace SUHttpServer.Routing
 
         private IRoutingTable MapGet(string path, Func<Request, Response> responseFunction)
         {
+            Guard.AgainstDuplicatedKey(routes[Method.Get], path, "RoutingTable.Get");
             routes[Method.Get][path] = responseFunction;            
 
             return this;
@@ -47,6 +48,7 @@ namespace SUHttpServer.Routing
 
         private IRoutingTable MapPost(string path, Func<Request, Response> responseFunction)
         {
+            Guard.AgainstDuplicatedKey(routes[Method.Post], path, "RoutingTable.Get");
             routes[Method.Post][path] = responseFunction;
 
             return this;
