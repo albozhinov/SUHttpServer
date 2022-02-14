@@ -22,6 +22,8 @@
 
         public IReadOnlyDictionary<string, string> Form { get; private set; }
 
+        public IReadOnlyDictionary<string, string> Query { get; private set; }
+
         public static IServiceCollection ServiceCollection { get; private set; }
 
         private static Dictionary<string, Session> Sessions = new();
@@ -43,7 +45,7 @@
             var lines = request.Split("\r\n");
             var firstLine = lines.First().Split(" ");
 
-            var url = firstLine[1];
+            (string url, Dictionary<string, string> query) = ParseUrl(firstLine[1]);
             Method method = ParseMethod(firstLine[0]);
 
             HeaderCollection headers = ParseHeaders(lines.Skip(1));
@@ -66,8 +68,35 @@
                 Body = body,
                 Form = form,
                 Cookies = cokies,
-                Session = session
+                Session = session,
+                Query = query
             };
+        }
+
+        private static (string url, Dictionary<string, string> query) ParseUrl(string queryString)
+        {
+            string url = string.Empty;
+            var query = new Dictionary<string, string>();
+            var parts = queryString.Split("?", 2);
+
+            if (parts.Length > 1)
+            {
+                var queryParams = parts[1].Split("&");
+
+                foreach (var pair in queryParams)
+                {
+                    var param = pair.Split('=');
+
+                    if (param.Length == 2)
+                    {
+                        query.Add(param[0], param[1]);
+                    }
+                }
+            }
+
+            url = parts[0];
+
+            return (url, query);
         }
 
         private static Session GetSession(CookieCollection cokies)
