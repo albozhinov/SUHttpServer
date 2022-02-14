@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace SUHttpServer.HTTP
+﻿namespace SUHttpServer.HTTP
 {
+    using SUHttpServer.Common;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+
     public class Request
     {
         public Method Method { get; private set; }
@@ -21,6 +22,8 @@ namespace SUHttpServer.HTTP
 
         public IReadOnlyDictionary<string, string> Form { get; private set; }
 
+        public static IServiceCollection ServiceCollection { get; private set; }
+
         private static Dictionary<string, Session> Sessions = new();
 
         private static Dictionary<string, string> ParseFormData(string bodyLines) => HttpUtility.UrlDecode(bodyLines)
@@ -33,9 +36,10 @@ namespace SUHttpServer.HTTP
                                 StringComparer.InvariantCultureIgnoreCase);
 
 
-        public static Request Parse(string request)
+        public static Request Parse(string request, IServiceCollection serviceCollection)
         {
-            
+            ServiceCollection = serviceCollection;
+
             var lines = request.Split("\r\n");
             var firstLine = lines.First().Split(" ");
 
@@ -132,7 +136,7 @@ namespace SUHttpServer.HTTP
                     throw new InvalidOperationException("Request headers is not valid");
                 }
 
-                
+
                 headers.Add(parts[0], parts[1].Trim());
             }
             return headers;
@@ -150,6 +154,6 @@ namespace SUHttpServer.HTTP
 
                 throw new InvalidOperationException($"Method {method} is not supported");
             }
-        }        
+        }
     }
 }

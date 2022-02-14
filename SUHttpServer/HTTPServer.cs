@@ -1,4 +1,7 @@
-﻿using SUHttpServer.HTTP;
+﻿namespace SUHttpServer
+{
+using SUHttpServer.Common;
+using SUHttpServer.HTTP;
 using SUHttpServer.Routing;
 using System;
 using System.Linq;
@@ -7,14 +10,14 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SUHttpServer
-{
     public class HTTPServer
     {
         private readonly IPAddress ipAddress;
         private readonly int port;
         private readonly TcpListener serverListener;
         private readonly RoutingTable routingTable;
+
+        public readonly IServiceCollection ServiceCollection;
                 
 
         public HTTPServer(string _ipAddress, int _port, Action<IRoutingTable> routingTableConfiguration)
@@ -25,6 +28,7 @@ namespace SUHttpServer
             serverListener = new TcpListener(ipAddress, port);
 
             routingTableConfiguration(routingTable = new RoutingTable());
+            ServiceCollection = new ServiceCollection();
         }
 
         public HTTPServer(int port, Action<IRoutingTable> routingTable)
@@ -55,7 +59,7 @@ namespace SUHttpServer
                 {
                     var networkStream = connection.GetStream();
                     var strRequest = await ReadRequest(networkStream);
-                    var request = Request.Parse(strRequest);
+                    var request = Request.Parse(strRequest, ServiceCollection);
                     //string content = "Hello world";
                     var response = this.routingTable.MatchRequest(request);
 

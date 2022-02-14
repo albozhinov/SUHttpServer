@@ -1,9 +1,10 @@
-﻿using SUHttpServer.Controllers;
-using SUHttpServer.HTTP;
-using System;
-
-namespace SUHttpServer.Routing
+﻿namespace SUHttpServer.Routing
 {
+    using SUHttpServer.Controllers;
+    using SUHttpServer.HTTP;
+    using System;
+    using System.Reflection;
+
     public static class RoutingTableExtension
     {
         public static IRoutingTable MapGet<TController>(
@@ -25,5 +26,16 @@ namespace SUHttpServer.Routing
 
         private static TController CreateController<TController>(Request request)
             => (TController)Activator.CreateInstance(typeof(TController), new[] { request });
+
+        private static Controller CreateController(Type controllerType, Request request)
+        {
+            var controller = (Controller)Request.ServiceCollection.CreateInstance(controllerType);
+
+            controllerType
+                .GetProperty("Request", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(controller, request);
+
+            return controller;
+        }
     }
 }
