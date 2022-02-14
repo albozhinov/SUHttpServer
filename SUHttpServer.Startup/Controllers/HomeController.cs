@@ -1,4 +1,5 @@
-﻿using SUHttpServer.Controllers;
+﻿using SUHttpServer.Attributes;
+using SUHttpServer.Controllers;
 using SUHttpServer.HTTP;
 using SUHttpServer.Startup.Models;
 using System;
@@ -22,12 +23,17 @@ namespace SUHttpServer.Startup.Controllers
 
         }
 
+        [HttpGet]
         public Response Index() => Text("Hello from the server!");
+
+        [HttpGet]
+        public Response Student(string name, int age) => Text($"I'm {name} and I'm {age} years old!");
 
         public Response Redirect() => Redirect("https://softuni.org/");
 
         public Response Html() => View();
 
+        [HttpPost]
         public Response HtmlFormPost()
         {
             var name = Request.Form["Name"];

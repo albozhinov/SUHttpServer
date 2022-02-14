@@ -109,7 +109,7 @@
             }
 
             return Sessions[sessionId];
-        }
+        }        
 
         private static CookieCollection ParseCookies(HeaderCollection headers)
         {

@@ -1,12 +1,12 @@
-﻿using SUHttpServer.HTTP;
+﻿namespace SUHttpServer.Controllers
+{
+using SUHttpServer.HTTP;
 using SUHttpServer.Responses;
 using System.Runtime.CompilerServices;
 
-namespace SUHttpServer.Controllers
-{
     public abstract class Controller
     {
-        protected Request Request { get; private init; }
+        protected Request Request { get; set; }
 
         public Controller(Request request)
         {
